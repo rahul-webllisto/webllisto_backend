@@ -4,6 +4,8 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
+from django.template import RequestContext
+
 from . utils import *
 from . serializers import *
 import json
@@ -21,10 +23,10 @@ class ContactusAPIView(APIView):
     __doc__ = "Contact us API"
 
     def post(self,request):
-        try:
-            contact_serializer = ContactSerializer(data=request.data)
-            if contact_serializer.is_valid():                
-                contact_serializer.save()               
+        try:                         
+            contact_serializer = ContactSerializer(data=request.data)                      
+            if contact_serializer.is_valid():
+                contact_serializer.save()                 
                 send_contact_email({'data':request.data})             
                 return Response({                    
                     'status': True,

@@ -4,20 +4,21 @@ from . models import *
 
 
 class ContactSerializer(serializers.ModelSerializer):
-    def validate(self, data, *args, **kwargs):
-        return super(ContactSerializer, self).validate(data, *args, **kwargs)
+    token = serializers.CharField()
 
-    def create(self, validated_data):        
-        name=validated_data['name']
-        phone = validated_data['phone']
-        email = validated_data['email']
-        detail = validated_data['detail']
-        contact = Contact.objects.create(**validated_data)
-        contact.save()
-        return contact
+    def validate(self, attrs):        
+        token = attrs.get('token')
+        if token == 'webllisto':           
+            return attrs
+        else:
+            raise serializers.ValidationError("Invalid token!")
+
+    def create(self, validated_data): 
+        del validated_data['token']
+        return Contact.objects.create(**validated_data)
 
 
     class Meta:
         model = Contact
-        fields = ('name', 'phone', 'email',
+        fields = ('token', 'name', 'phone', 'email',
                   'detail',)
