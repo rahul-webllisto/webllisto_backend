@@ -6,7 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 from django.template import RequestContext
 
-from . utils import *
+# from . utils import *
 from . serializers import *
 import json
 from collections import OrderedDict
@@ -14,6 +14,8 @@ from collections import OrderedDict
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from webllisto_backend.tasks import send_contact_email
+
 # Create your views here.
 
 
@@ -26,8 +28,9 @@ class ContactusAPIView(APIView):
         try:                         
             contact_serializer = ContactSerializer(data=request.data)                      
             if contact_serializer.is_valid():
-                contact_serializer.save()                 
-                send_contact_email({'data':request.data})             
+                contact_serializer.save()                
+                send_contact_email({'data':request.data})        
+                             
                 return Response({                    
                     'status': True,
                     'message' : 'Thankyou for contacting us'                    
