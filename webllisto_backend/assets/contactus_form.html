@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Contact us</title>
+</head>
+<body>
+<form method="POST" id="my-ajax-form">
+	<div class="form-group">
+	<label for="token">Token</label>
+    <input type="token" class="form-control" id="token" name="token" value="webllisto">
+  </div>  
+  <div class="form-group">
+	<label for="name">Name</label>
+    <input type="name" class="form-control" id="name" name="name" placeholder="Name">
+  </div>  
+  <div class="form-group">
+	<label for="phone">Phone</label>
+    <input type="phone" class="form-control" id="phone" name="phone" placeholder="Phone">
+  </div>
+  <div class="form-group">
+    <label for="email">Email address</label>
+    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div> 
+  <div class="form-group">
+    <label for="detail">Message</label>
+    <textarea class="form-control" name="detail" id="detail" rows="3"></textarea>
+  </div>   
+  	<button type="submit">Submit</button>
+
+	<p id="demo"></p>
+</form>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+ 
+<script>
+
+// function loadDoc() {
+  // var xhttp = new XMLHttpRequest();
+  // xhttp.onreadystatechange = function() {
+  //   if (this.readyState == 4 && this.status == 200) {
+  //     document.getElementById("demo").innerHTML = "Thankyou for contacting us, we will get back to you soon";
+  //   }
+  // };
+  // xhttp.open("POST", "http://127.0.0.1:8000/api/contactus", true);
+  // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  // xhttp.send("name=testing&phone=+911234567890&email=testing@yopmail.com&detail=testingajax");
+// }
+
+// function loadDoc() {
+// 	// AJAX for posting
+// 	    console.log("create post is working!") // sanity check
+// 	    $.ajax({
+// 	        url : "create_post/", // the endpoint
+// 	        type : "POST", // http method
+// 	        data : { name: $('#name').val(), phone: $('#phone').val() , email: $('#email').val(), detail: $('#detail').val(),}, // data sent with the post request
+
+// 	        // handle a successful response
+// 	        success : function(json) {
+// 				console.log(json); // log the returned json to the console
+// 				console.log("success"); // another sanity check
+// 	        },
+
+// 	        // handle a non-successful response
+// 	        error : function(xhr,errmsg,err) {
+// 	            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+// 	                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+// 	            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+// 	        }
+// 	    });
+//   return false;
+// }
+
+$(document).ready(function(){
+    var $myForm = $('#my-ajax-form')
+    $myForm.submit(function(event){
+        event.preventDefault()
+        var $formData = $(this).serialize()
+    	console.log($formData);
+
+        var $thisURL = "http://127.0.0.1:8000/api/contactus" 
+        $.ajax({
+            method: "POST",
+            url: $thisURL,
+            dataType: 'json',
+            data: $formData,
+            success: handleFormSuccess,
+            error: handleFormError,
+        })
+    })
+
+    function handleFormSuccess(data, textStatus, jqXHR){
+        console.log(data)
+        console.log(textStatus)
+        console.log(jqXHR)
+        $myForm.reset(); // reset form data
+    }
+
+    function handleFormError(jqXHR, textStatus, errorThrown){
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
+    }
+})
+
+
+</script>
+</body>
+</html>
